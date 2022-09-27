@@ -22,7 +22,7 @@ FILES = ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_isprint ft_strlen 	\
 	ft_memcmp ft_strnstr ft_atoi ft_calloc ft_strdup ft_substr 		\
 	ft_strjoin ft_strtrim ft_split ft_itoa ft_strmapi ft_striteri 		\
 	ft_putchar_fd ft_putstr_fd ft_putendl_fd ft_putnbr_fd ft_uitoa 		\
-	ft_putnbrbase_fd ft_strpchr							\
+	ft_putnbrbase_fd ft_strpchr ft_strndup					\
 	ft_lstnew ft_lstadd_front ft_lstsize ft_lstlast ft_lstadd_back 		\
 	ft_lstdelone ft_lstmemdel ft_lstclear ft_lstiter ft_lstmap		\
 	ft_printf ft_printf_tools ft_printf_p					\
