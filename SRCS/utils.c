@@ -16,9 +16,9 @@ char	*get_path(char *cmd, char **envp)
 	if (!envp[i])
 		return (cmd);
 	path = envp[i] + 5;
-	while (path && ft_strchr(path, ':'))
+	while (path && ft_strpchr(path, ':') > -1)
 	{
-		ft_strlcpy() 
+		dir = ft_strndup(path, ft_strpchr(path, ':'));
 	}
 	return (cmd);
 }
