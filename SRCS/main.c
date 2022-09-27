@@ -4,8 +4,24 @@
 
 #include "pipex.h"
 
-int main(void)
+int	main(int argc, char **argv, char **envp)
 {
-	ft_printf("Hello World");
+	int	f1;
+	int	f2;
+
+	if (argc == 5)
+	{
+		f1 = open(argv[1], O_RDONLY);
+		f2 = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
+		if (f1 < 0 || f2 < 0)
+			return (-1);
+		pipex(f1, f2, argv, envp);
+		pipex(1, 2, argv, envp);
+	}
+	(void)argc;
+	(void)f1;
+	(void)f2;
+	(void)argv;
+	(void)envp;
 	return (0);
 }
