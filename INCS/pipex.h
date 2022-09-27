@@ -4,6 +4,13 @@
 # include "libft.h"
 # include "ft_printf.h"
 # include "get_next_line.h"
+# include <errno.h>
+
+typedef struct	s_pipex
+{
+	char	*path;
+	char	**cmd_paths;
+}	t_pipex;
 
 char	*get_path(char *cmd, char **envp);
 void	child_process(int f1, char *cmd1);

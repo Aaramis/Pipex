@@ -6,27 +6,32 @@
 
 char	*get_path(char *cmd, char **envp)
 {
-	char	*path;
-	char	*dir;
-	size_t		i;
+//	char	*path;
+//	char	*dir;
+//	size_t		i;
 
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
-		i++;
-	if (!envp[i])
+//	i = 0;
+	while (ft_strncmp("PATH", *envp, 4))
+		envp++;
+	if (!envp)
 		return (cmd);
+	return (*envp + 5);
+	/*
 	path = envp[i] + 5;
 	while (path && ft_strpchr(path, ':') > -1)
 	{
 		dir = ft_strndup(path, ft_strpchr(path, ':'));
+		path += ft_strpchr(path, ':') + 1;
 	}
-	return (cmd);
+	*/
+//	(void)cmd;
+//	return (dir);
 }
 
 void	parent_process(int f2, char *cmd2)
 {
-	if (dup2(f2, STDOUT) < 0)
-		return (perror("Dup2 :"));
+//	if (dup2(f2, STDOUT) < 0)
+//		return (perror("Dup2 :"));
 	close(f2);
 	(void)f2;
 	(void)cmd2;
@@ -34,8 +39,8 @@ void	parent_process(int f2, char *cmd2)
 
 void	child_process(int f1, char *cmd1)
 {
-	if (dup2(f1, STDIN) < 0)
-		return (perror("Dup2 :"));
+//	if (dup2(f1, STDIN) < 0)
+//		return (perror("Dup2 :"));
 	
 	(void)f1;
 	(void)cmd1;
