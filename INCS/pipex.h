@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/27 18:42:26 by agardett          #+#    #+#             */
+/*   Updated: 2022/09/29 20:59:57 by agardett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -5,6 +17,7 @@
 # include "ft_printf.h"
 # include "get_next_line.h"
 # include <errno.h>
+# include <sys/wait.h>
 
 # define ERR_INFILE "Infile"
 # define ERR_OUTFILE "Outfile"
@@ -15,7 +28,7 @@
 # define ERR_CMD "Command not found\n"
 # define ERR_MALLOC "Error Malloc\n"
 
-typedef struct	s_pipex
+typedef struct s_pipex
 {
 	char	**paths;
 	char	**cmds;

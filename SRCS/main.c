@@ -1,6 +1,14 @@
-//
-//	Header
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/27 18:42:26 by agardett          #+#    #+#             */
+/*   Updated: 2022/09/29 20:59:57 by agardett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -12,9 +20,9 @@ void	msg_error(char *str, t_pipex *pip)
 			free_tab(pip->paths);
 		if (pip->cmds)
 			free_tab(pip->cmds);
-		if (pip->cmd)	
-			free(pip->cmd);	
-	free(pip);	
+		if (pip->cmd)
+			free(pip->cmd);
+		free(pip);
 	}
 	perror(str);
 	exit (1);
@@ -47,13 +55,8 @@ int	main(int argc, char **argv, char **envp)
 	pip->outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
 	if (!pip->outfile)
 		msg_error(ERR_OUTFILE, pip);
-		
 	pipex(pip, argv, envp);
 	free_tab(pip->paths);
 	free(pip);
-	// pipex(1, 2, argv, envp);
-	(void)argc;
-	(void)argv;
-	(void)envp;
 	return (0);
 }
