@@ -19,13 +19,13 @@ t_pipex	*get_path(char **envp)
 	return (pip);
 }
 
-char	*get_cmd(t_pipex *pip, char **argv)
+char	*get_cmd(t_pipex *pip, char *argv)
 {
 	int		i;
 	char	*cmd;
 	char	*fcmd;
 
-	pip->cmds = ft_split(argv[2], ' ');
+	pip->cmds = ft_split(argv, ' ');
 	i = -1;
 	while (pip->paths[++i])
 	{
@@ -39,26 +39,36 @@ char	*get_cmd(t_pipex *pip, char **argv)
 	return (NULL);
 }
 
-void	parent_process(int f2, char *cmd2)
+void	parent_process(t_pipex *pip, char **argv, char **envp)
 {
-//	if (dup2(f2, STDOUT) < 0)
-//		return (perror("Dup2 :"));
-	close(f2);
-	(void)f2;
-	(void)cmd2;
+	if (dup2(pip->end[0], 0) < 0)
+		msg_error(ERR_DUP, pip);
+	close(pip->end[1]);
+	if (dup2(pip->outfile, 1) < 0)
+		msg_error(ERR_DUP, pip);
+	if (pip->cmds)
+		free_tab(pip->cmds);
+	if (pip->cmd)
+		free(pip->cmd);
+	pip->cmd = get_cmd(pip, argv[3]);
+	ft_printf("%s \n", pip->cmd);
+	if (!pip->cmd)
+		msg_error(ERR_CMD, pip);
+	execve(pip->cmd, pip->cmds, envp);
 }
 
 void	child_process(t_pipex *pip, char **argv, char **envp)
 {
-//	if (dup2(f1, STDIN) < 0)
-//		return (perror("Dup2 :"));
-
 	if (dup2(pip->end[1], 1) < 0)
 		msg_error(ERR_DUP, pip);
 	close(pip->end[0]);
 	if (dup2(pip->infile, 0) < 0)
 		msg_error(ERR_DUP, pip);
-	pip->cmd = get_cmd(pip, argv);
+	if (pip->cmds)
+		free_tab(pip->cmds);
+	if (pip->cmd)
+		free(pip->cmd);
+	pip->cmd = get_cmd(pip, argv[2]);
 	if (!pip->cmd)
 		msg_error(ERR_CMD, pip);
 	execve(pip->cmd, pip->cmds, envp);
@@ -72,14 +82,7 @@ void	pipex(t_pipex *pip, char **argv, char **envp)
 	if (pip->parent <  0)
 		msg_error(ERR_FORK, pip);
 	if (!pip->parent)
-		ft_printf("");
-		//parent(f1, get_path(argv[3], envp));
+		parent_process(pip, argv, envp);
 	else
-	{		
-		ft_printf("B \n");
 		child_process(pip, argv, envp);
-	}
-		//child (f2, get_path(argv[4], envp));
-	(void)argv;
-	(void)envp;
 }

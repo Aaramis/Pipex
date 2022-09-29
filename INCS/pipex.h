@@ -28,9 +28,9 @@ typedef struct	s_pipex
 
 //utils
 t_pipex	*get_path(char **envp);
-char	*get_cmd(t_pipex *pip, char **argv);
+char	*get_cmd(t_pipex *pip, char *argv);
 void	child_process(t_pipex *pip, char **argv, char **envp);
-void	parent_process(int f2, char *cmd2);
+void	parent_process(t_pipex *pip, char **argv, char **envp);
 void	pipex(t_pipex *pip, char **argv, char **envp);
 
 //main
