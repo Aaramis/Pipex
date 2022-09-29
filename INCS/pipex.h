@@ -11,6 +11,7 @@
 # define ERR_INPUT "Invalid number of arguments.\n"
 # define ERR_PIPE "Pipe"
 # define ERR_FORK "Fork"
+# define ERR_DUP "Dup2"
 # define ERR_CMD "Command not found\n"
 # define ERR_MALLOC "Error Malloc\n"
 
@@ -28,7 +29,7 @@ typedef struct	s_pipex
 //utils
 t_pipex	*get_path(char **envp);
 char	*get_cmd(t_pipex *pip, char **argv);
-void	child_process(t_pipex *pip, char **argv);
+void	child_process(t_pipex *pip, char **argv, char **envp);
 void	parent_process(int f2, char *cmd2);
 void	pipex(t_pipex *pip, char **argv, char **envp);
 

@@ -48,21 +48,20 @@ void	parent_process(int f2, char *cmd2)
 	(void)cmd2;
 }
 
-void	child_process(t_pipex *pip, char **argv)
+void	child_process(t_pipex *pip, char **argv, char **envp)
 {
 //	if (dup2(f1, STDIN) < 0)
 //		return (perror("Dup2 :"));
 
-//	dup2(pip->end[1], 1);
-//	close(pip->end[0]);
-//	dup2(pip->infile, 0);
+	if (dup2(pip->end[1], 1) < 0)
+		msg_error(ERR_DUP, pip);
+	close(pip->end[0]);
+	if (dup2(pip->infile, 0) < 0)
+		msg_error(ERR_DUP, pip);
 	pip->cmd = get_cmd(pip, argv);
 	if (!pip->cmd)
 		msg_error(ERR_CMD, pip);
-	ft_printf("%s", pip->cmd);
-
-	(void)pip;	
-	(void)argv;
+	execve(pip->cmd, pip->cmds, envp);
 }
 
 void	pipex(t_pipex *pip, char **argv, char **envp)
@@ -78,7 +77,7 @@ void	pipex(t_pipex *pip, char **argv, char **envp)
 	else
 	{		
 		ft_printf("B \n");
-		child_process(pip, argv);
+		child_process(pip, argv, envp);
 	}
 		//child (f2, get_path(argv[4], envp));
 	(void)argv;
