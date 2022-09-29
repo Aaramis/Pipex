@@ -10,6 +10,10 @@ void	msg_error(char *str, t_pipex *pip)
 	{
 		if (pip->paths)
 			free_tab(pip->paths);
+		if (pip->cmds)
+			free_tab(pip->cmds);
+		if (pip->cmd)	
+			free(pip->cmd);	
 	free(pip);	
 	}
 	perror(str);
@@ -30,11 +34,8 @@ void	free_tab(char **tab)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int i;
-	char *cmd;
 	t_pipex	*pip;
 
-	i = 0;
 	if (argc != 5)
 		msg_error(ERR_INPUT, NULL);
 	pip = get_path(envp);
@@ -47,12 +48,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!pip->outfile)
 		msg_error(ERR_OUTFILE, pip);
 		
-	while (pip->paths[++i])
-	{
-		cmd = ft_strjoin(pip->paths[i], argv[2]);
-		// ft_printf("%s\n", cmd);
-		free(cmd);
-	}
 	pipex(pip, argv, envp);
 	free_tab(pip->paths);
 	free(pip);
