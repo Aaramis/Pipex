@@ -50,10 +50,10 @@ int	main(int argc, char **argv, char **envp)
 	while (pip->paths[++i])
 	{
 		cmd = ft_strjoin(pip->paths[i], argv[2]);
-		ft_printf("%s\n", cmd);
+		// ft_printf("%s\n", cmd);
 		free(cmd);
 	}
-	// pipex(pip->infile, pip->outfile, argv, envp);
+	pipex(pip, argv, envp);
 	free_tab(pip->paths);
 	free(pip);
 	// pipex(1, 2, argv, envp);

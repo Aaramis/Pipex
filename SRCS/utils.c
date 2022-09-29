@@ -37,23 +37,19 @@ void	child_process(int f1, char *cmd1)
 	(void)cmd1;
 }
 
-void	pipex(int f1, int f2, char **argv, char **envp)
+void	pipex(t_pipex *pip, char **argv, char **envp)
 {
-	int	end[2];
-	pid_t	parent;
-
-	pipe(end);
-	parent = fork();
-	if (parent <  0)
-		return (perror("Fork: "));
-	if (!parent)
+	if (pipe(pip->end))
+		msg_error(ERR_PIPE, pip);
+	pip->parent = fork();
+	if (pip->parent <  0)
+		msg_error(ERR_FORK, pip);
+	if (!pip->parent)
 		ft_printf("A \n");
 		//parent(f1, get_path(argv[3], envp));
 	else
-		ft_printf("%d \n", parent);
+		ft_printf("%d \n", pip->parent);
 		//child (f2, get_path(argv[4], envp));
-	(void)f1;
-	(void)f2;
 	(void)argv;
 	(void)envp;
 }
