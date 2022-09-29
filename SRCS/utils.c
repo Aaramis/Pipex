@@ -15,7 +15,7 @@ t_pipex	*get_path(char **envp)
 		envp++;
 	if (!envp)
 		return NULL;
-	pip->cmd_paths = ft_split((*envp + 5), ':');
+	pip->paths = ft_split((*envp + 5), ':');
 	return (pip);
 }
 
