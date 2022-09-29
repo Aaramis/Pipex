@@ -4,6 +4,19 @@
 
 #include "pipex.h"
 
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	ft_printf("%d\n", i);
+	while (i > -1)
+		free(tab[i--]);
+	free(tab);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	int	f1;
@@ -12,18 +25,18 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc == 5)
 	{
-		pip = malloc(sizeof(* pip));
+		pip = get_path(envp);
 		if (!pip)
-			return (0);
-		pip->path = get_path(argv[3], envp);
-		pip->cmd_paths = ft_split(pip->path, ':');
-		ft_printf("%s \n  %s\n", pip->path, pip->cmd_paths[0]);
+			return (-1);
+		ft_printf("%s\n", pip->cmd_paths[0]);
 		f1 = open(argv[1], O_RDONLY);
 		f2 = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
 		if (f1 < 0 || f2 < 0)
 			return (-1);
-		pipex(f1, f2, argv, envp);
-		pipex(1, 2, argv, envp);
+		// pipex(f1, f2, argv, envp);
+		free_tab(pip->cmd_paths);
+		free(pip);
+		// pipex(1, 2, argv, envp);
 	}
 	(void)argc;
 	(void)f1;

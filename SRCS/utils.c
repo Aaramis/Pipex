@@ -4,28 +4,19 @@
 
 #include "pipex.h"
 
-char	*get_path(char *cmd, char **envp)
+t_pipex	*get_path(char **envp) 
 {
-//	char	*path;
-//	char	*dir;
-//	size_t		i;
+	t_pipex	*pip;
 
-//	i = 0;
+	pip = malloc(sizeof(* pip));
+	if (!pip)
+		return NULL;
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
 	if (!envp)
-		return (cmd);
-	return (*envp + 5);
-	/*
-	path = envp[i] + 5;
-	while (path && ft_strpchr(path, ':') > -1)
-	{
-		dir = ft_strndup(path, ft_strpchr(path, ':'));
-		path += ft_strpchr(path, ':') + 1;
-	}
-	*/
-//	(void)cmd;
-//	return (dir);
+		return NULL;
+	pip->cmd_paths = ft_split((*envp + 5), ':');
+	return (pip);
 }
 
 void	parent_process(int f2, char *cmd2)
@@ -57,10 +48,10 @@ void	pipex(int f1, int f2, char **argv, char **envp)
 		return (perror("Fork: "));
 	if (!parent)
 		ft_printf("A \n");
-		//child_process(f1, get_path(argv[3], envp));
+		//parent(f1, get_path(argv[3], envp));
 	else
-		ft_printf("B \n");
-		//parent_process(f2, get_path(argv[4], envp));
+		ft_printf("%d \n", parent);
+		//child (f2, get_path(argv[4], envp));
 	(void)f1;
 	(void)f2;
 	(void)argv;

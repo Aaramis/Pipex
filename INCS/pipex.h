@@ -8,13 +8,13 @@
 
 typedef struct	s_pipex
 {
-	char	*path;
 	char	**cmd_paths;
 }	t_pipex;
 
-char	*get_path(char *cmd, char **envp);
+t_pipex	*get_path(char **envp);
 void	child_process(int f1, char *cmd1);
 void	parent_process(int f2, char *cmd2);
+void	free_tab(char **tab);
 void	pipex(int f1, int f2, char **argv, char **envp);
 
 #endif
