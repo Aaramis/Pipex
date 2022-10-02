@@ -6,7 +6,7 @@
 #    By: agardett <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/27 17:38:06 by agardett          #+#    #+#              #
-#    Updated: 2022/09/29 10:45:02 by agardett         ###   ########.fr        #
+#    Updated: 2022/10/02 13:32:48 by agardett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,16 @@
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
 FILES		= utils
+FILES_B		= utils_bonus
 
 SRCS		= $(addsuffix .c,$(FILES))
+SRCS_B		= $(addsuffix .c,$(FILES_B))
 OBJS		= $(addprefix $(SRC_F),$(addsuffix .o,$(FILES)))
+OBJS_B		= $(addprefix $(SRC_F),$(addsuffix .o,$(FILES_B)))
 
 #	INCLUDES
 INC		= ./INCS
 INC_L		= $(LIBFT_F)/INCS
-PIPEX_H		= push_swap.h
 NAME_LIB	= libft.a
 LIB_F		= $(LIBFT_F)/$(NAME_LIB)
 
@@ -43,6 +45,7 @@ LIB		= $(LIBFT_F)/$(NAME_LIB)
 
 #	OUTPUT
 NAME_EX		= pipex
+NAME_B		= pipex_bonus
 
 ############
 #  COLORS  #
@@ -76,7 +79,7 @@ $(NAME_EX):
 		$(EOC)
 
 clean:
-		@$(RM) $(OBJS)
+		@$(RM) $(OBJS) $(OBJS_B)
 		@cd $(LIBFT_F) && $(MAKE) clean
 
 
@@ -87,7 +90,7 @@ fclean:		clean
 		"#######################################\n"		\
 		$(EOC)
 		@cd $(LIBFT_F) && $(MAKE) fclean
-		@$(RM) $(NAME_EX)
+		@$(RM) $(NAME_EX) $(NAME_B)
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully cleaned -------\n"		\
 		$(EOC)
@@ -95,5 +98,20 @@ fclean:		clean
 re: 		fclean
 		@$(MAKE) all
 
-.PHONY: 	all clean fclean re
+bonus:		$(NAME_EX) $(NAME_B)
+
+$(NAME_B):
+		@echo $(CYAN) "\n"					\
+		"#######################################\n"		\
+		"   Compilation des fichiers en bonus   \n"	 	\
+		"#######################################\n"		\
+		$(EOC)
+		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS_B)
+		@$(CC) $(GFLAGS) $(SRC_F)main_bonus.c $(OBJS_B) $(LIB_F) -o $(NAME_B)
+		@echo $(CYAN) "\n"					\
+		"------- Succeeded : fully compiled -------\n"		\
+		$(EOC)
+
+
+.PHONY: 	all clean fclean re bonus
 .SILENT:	all
