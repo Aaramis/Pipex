@@ -97,6 +97,7 @@ fclean:		clean
 
 re: 		fclean
 		@$(MAKE) all
+		@$(MAKE) bonus
 
 bonus:		$(NAME_EX) $(NAME_B)
 

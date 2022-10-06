@@ -12,7 +12,7 @@
 
 #include "pipex_bonus.h"
 
-void	msg_error_b(char *str, t_pipex *pip)
+void	msg_error_b(char *str, t_pipexb *pip)
 {
 	if (pip)
 	{
@@ -22,7 +22,13 @@ void	msg_error_b(char *str, t_pipex *pip)
 			free_tab_b(pip->cmds);
 		if (pip->cmd)
 			free(pip->cmd);
+		if (pip->end)
+			free(pip->end);
 		free(pip);
+		if (pip->infile)
+			close(pip->infile);
+		if (pip->outfile)
+			close(pip->outfile);
 	}
 	perror(str);
 	exit (1);
@@ -42,9 +48,9 @@ void	free_tab_b(char **tab)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_pipex	*pip;
+	t_pipexb	*pip;
 
-	if (argc != 5)
+	if (argc < 5)
 		msg_error_b(ERR_INPUT, NULL);
 	pip = get_path_b(envp);
 	if (!pip)
@@ -55,7 +61,8 @@ int	main(int argc, char **argv, char **envp)
 	pip->outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
 	if (!pip->outfile)
 		msg_error_b(ERR_OUTFILE, pip);
-	pipex_b(pip, argv, envp);
+//	ft_printf("%d %d %s\n", pip->infile, pip->outfile, pip->paths[0]);
+	pipex_b(pip, argc, argv, envp);
 	free_tab_b(pip->paths);
 	free(pip);
 	return (0);

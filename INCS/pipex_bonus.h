@@ -28,26 +28,31 @@
 # define ERR_CMD "Command not found\n"
 # define ERR_MALLOC "Error Malloc\n"
 
-typedef struct s_pipex
+typedef struct s_pipexb
 {
 	char	**paths;
 	char	**cmds;
 	char	*cmd;
 	int		infile;
 	int		outfile;
-	int		end[2];
+	int		nb_cmd;
+	int		nb_pipe;
+	int		index;
+	int		*end;
 	pid_t	parent;
-}	t_pipex;
+}	t_pipexb;
 
 //utils
-t_pipex	*get_path_b(char **envp);
-char	*get_cmd_b(t_pipex *pip, char *argv);
-void	child_process_b(t_pipex *pip, char **argv, char **envp);
-void	parent_process_b(t_pipex *pip, char **argv, char **envp);
-void	pipex_b(t_pipex *pip, char **argv, char **envp);
+t_pipexb	*get_path_b(char **envp);
+char	*get_cmd_b(t_pipexb *pip, char *argv);
+void	child_process_b(t_pipexb *pip, char **argv, char **envp);
+void	init_pipe(t_pipexb *pip);
+void	pipex_b(t_pipexb *pip,int argc, char **argv, char **envp);
+void	dup_pipe(int first, int second, t_pipexb *pip);
+
 
 //main
-void	msg_error_b(char *str, t_pipex *pip);
+void	msg_error_b(char *str, t_pipexb *pip);
 void	free_tab_b(char **tab);
 
 #endif
