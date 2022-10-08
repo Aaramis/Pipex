@@ -50,11 +50,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipexb	*pip;
 
-	if (argc < 5)
+	pip = check_argv(argv[1]);
+	if (argc < pip->argc_min)
 		msg_error_b(ERR_INPUT, NULL);
-	pip = get_path_b(envp);
-	if (!pip)
-		msg_error_b(ERR_MALLOC, pip);
+	get_path_b(envp, pip);
 	pip->infile = open(argv[1], O_RDONLY);
 	if (!pip->infile)
 		msg_error_b(ERR_INFILE, pip);

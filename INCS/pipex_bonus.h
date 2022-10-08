@@ -39,17 +39,21 @@ typedef struct s_pipexb
 	int		nb_pipe;
 	int		index;
 	int		*end;
+	int		hd;
+	int		argc_min;
 	pid_t	parent;
 }	t_pipexb;
 
 //utils
-t_pipexb	*get_path_b(char **envp);
 char	*get_cmd_b(t_pipexb *pip, char *argv);
 void	child_process_b(t_pipexb *pip, char **argv, char **envp);
 void	init_pipe(t_pipexb *pip);
 void	pipex_b(t_pipexb *pip,int argc, char **argv, char **envp);
 void	dup_pipe(int first, int second, t_pipexb *pip);
+void	get_path_b(char **envp,t_pipexb *pip);
 
+//heredoc
+t_pipexb	*check_argv(char *str);
 
 //main
 void	msg_error_b(char *str, t_pipexb *pip);

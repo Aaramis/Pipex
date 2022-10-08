@@ -18,7 +18,7 @@
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
 FILES		= utils
-FILES_B		= utils_bonus
+FILES_B		= utils_bonus heredoc
 
 SRCS		= $(addsuffix .c,$(FILES))
 SRCS_B		= $(addsuffix .c,$(FILES_B))

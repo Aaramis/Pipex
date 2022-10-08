@@ -24,6 +24,8 @@ t_pipex	*get_path(char **envp)
 	if (!envp)
 		return (NULL);
 	pip->paths = ft_split((*envp + 5), ':');
+	if (!pip->paths)
+		return (NULL);
 	return (pip);
 }
 

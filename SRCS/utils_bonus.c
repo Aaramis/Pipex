@@ -12,19 +12,15 @@
 
 #include "pipex_bonus.h"
 
-t_pipexb	*get_path_b(char **envp)
+void	get_path_b(char **envp,t_pipexb *pip)
 {
-	t_pipexb	*pip;
-
-	pip = malloc(sizeof(*pip));
-	if (!pip)
-		return (NULL);
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
 	if (!envp)
-		return (NULL);
+		return ;
 	pip->paths = ft_split((*envp + 5), ':');
-	return (pip);
+	if (!pip->paths)
+		msg_error_b(ERR_MALLOC, pip);
 }
 
 char	*get_cmd_b(t_pipexb *pip, char *argv)
@@ -49,13 +45,10 @@ char	*get_cmd_b(t_pipexb *pip, char *argv)
 
 void	dup_pipe(int first, int second, t_pipexb *pip)
 {
-	dup2(first, 0);
-	dup2(second, 1);
-	(void)pip;
-	// if (dup2(first, 0) < 0)
-	// 	msg_error_b(ERR_DUP, pip);
-	// if (dup2(second, 1) < 0)
-	// 	msg_error_b(ERR_DUP, pip);
+	if (dup2(first, 0) < 0)
+		msg_error_b(ERR_DUP, pip);
+	if (dup2(second, 1) < 0)
+		msg_error_b(ERR_DUP, pip);
 }
 
 void	child_process_b(t_pipexb *pip, char **argv, char **envp)
