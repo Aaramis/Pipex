@@ -61,7 +61,6 @@ int	main(int argc, char **argv, char **envp)
 	pip->outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
 	if (!pip->outfile)
 		msg_error_b(ERR_OUTFILE, pip);
-//	ft_printf("%d %d %s\n", pip->infile, pip->outfile, pip->paths[0]);
 	pipex_b(pip, argc, argv, envp);
 	free_tab_b(pip->paths);
 	free(pip);
