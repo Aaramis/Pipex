@@ -32,3 +32,19 @@ t_pipexb	*check_argv(char *str)
 		return (pip);
 	}
 }
+
+void	parsing_hd(char *argv, t_pipexb pip)
+{
+
+	
+}
+
+void	get_infile(char **argv, t_pipexb pip)
+{
+	if (pip->hd)
+		//parsing
+	else
+		pip->infile = open(argv[1], O_RDONLY);
+	if (!pip->infile)
+		msg_error(ERR_INFILE, pip);
+}

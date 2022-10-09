@@ -54,6 +54,7 @@ void	get_path_b(char **envp,t_pipexb *pip);
 
 //heredoc
 t_pipexb	*check_argv(char *str);
+void get_infile(char **argv, t_pipexb pip);
 
 //main
 void	msg_error_b(char *str, t_pipexb *pip);
