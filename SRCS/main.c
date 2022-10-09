@@ -44,6 +44,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pip;
 
+	if (!envp)
+		msg_error(ERR_ENVP, NULL);
 	if (argc != 5)
 		msg_error(ERR_INPUT, NULL);
 	pip = get_path(envp);

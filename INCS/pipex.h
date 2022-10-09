@@ -27,6 +27,7 @@
 # define ERR_DUP "Dup2"
 # define ERR_CMD "Command not found\n"
 # define ERR_MALLOC "Error Malloc\n"
+# define ERR_ENVP "Error Environment\n"
 
 typedef struct s_pipex
 {

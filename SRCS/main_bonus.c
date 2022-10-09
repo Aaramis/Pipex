@@ -50,6 +50,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipexb	*pip;
 
+	if (!envp)
+		msg_error_b(ERR_ENVP, NULL);
 	pip = check_argv(argv[1]);
 	if (argc < pip->argc_min)
 		msg_error_b(ERR_INPUT, NULL);
