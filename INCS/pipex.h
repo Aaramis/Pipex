@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/27 18:42:26 by agardett          #+#    #+#             */
-/*   Updated: 2022/09/29 20:59:57 by agardett         ###   ########.fr       */
+/*   Created: 2022/10/25 17:53:03 by agardett          #+#    #+#             */
+/*   Updated: 2022/10/25 17:53:05 by agardett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,32 @@
 # define ERR_MALLOC "Error Malloc\n"
 # define ERR_ENVP "Error Environment\n"
 
-typedef struct s_pipex
+typedef struct s_pipexb
 {
 	char	**paths;
 	char	**cmds;
 	char	*cmd;
 	int		infile;
 	int		outfile;
-	int		end[2];
+	int		nb_cmd;
+	int		nb_pipe;
+	int		ind;
+	int		*end;
+	int		argc_min;
 	pid_t	parent;
-}	t_pipex;
+}	t_pipexb;
 
 //utils
-t_pipex	*get_path(char **envp);
-char	*get_cmd(t_pipex *pip, char *argv);
-void	child_process(t_pipex *pip, char **argv, char **envp);
-void	parent_process(t_pipex *pip, char **argv, char **envp);
-void	pipex(t_pipex *pip, char **argv, char **envp);
+char		*get_cmd(t_pipexb *pip, char *argv);
+void		child_process(t_pipexb *pip, char **argv, char **envp);
+void		init_pipe(t_pipexb *pip);
+void		pipex(t_pipexb *pip, int argc, char **argv, char **envp);
+void		dup_pipe(int first, int second, t_pipexb *pip);
 
 //main
-void	msg_error(char *str, t_pipex *pip);
-void	free_tab(char **tab);
+void		get_path(char **envp, t_pipexb *pip);
+t_pipexb	*init_pip(void);
+void		msg_error(char *str, t_pipexb *pip);
+void		free_tab(char **tab);
 
 #endif
