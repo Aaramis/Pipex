@@ -42,7 +42,6 @@ LIB			= $(LIBFT_F)/$(NAME_LIB)
 
 #	OUTPUT
 NAME_EX		= pipex
-NAME_B		= pipex_bonus
 
 ############
 #  COLORS  #
@@ -76,7 +75,7 @@ $(NAME_EX):
 		$(EOC)
 
 clean:
-		@$(RM) $(OBJS) $(OBJS_B)
+		@$(RM) $(OBJS)
 		@cd $(LIBFT_F) && $(MAKE) clean
 
 fclean:		clean
@@ -86,7 +85,7 @@ fclean:		clean
 		"#######################################\n"		\
 		$(EOC)
 		@cd $(LIBFT_F) && $(MAKE) fclean
-		@$(RM) $(NAME_EX) $(NAME_B)
+		@$(RM) $(NAME_EX)
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully cleaned -------\n"		\
 		$(EOC)
