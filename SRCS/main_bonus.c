@@ -14,7 +14,7 @@
 
 void	msg_error_b(char *str, t_pipexb *pip)
 {
-	if (pip)
+	if (pip->argc_min)
 	{
 		if (pip->paths)
 			free_tab_b(pip->paths);
@@ -24,14 +24,17 @@ void	msg_error_b(char *str, t_pipexb *pip)
 			free(pip->cmd);
 		if (pip->end)
 			free(pip->end);
-		free(pip);
 		if (pip->infile)
 			close(pip->infile);
 		if (pip->outfile)
 			close(pip->outfile);
+		free(pip);
 	}
-	perror(str);
-	exit (1);
+	if (str)
+	{
+		perror(str);
+		exit (1);
+	}
 }
 
 void	free_tab_b(char **tab)
@@ -53,8 +56,9 @@ int	main(int argc, char **argv, char **envp)
 	if (!envp)
 		msg_error_b(ERR_ENVP, NULL);
 	pip = check_argv(argv[1]);
+	printf("%d %d	%d\n", pip->argc_min, argc, argc < pip->argc_min);
 	if (argc < pip->argc_min)
-		msg_error_b(ERR_INPUT, NULL);
+	  	msg_error_b(ERR_INPUT, pip);
 	get_path_b(envp, pip);
 	pip->infile = open(argv[1], O_RDONLY);
 	if (!pip->infile)
@@ -63,7 +67,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!pip->outfile)
 		msg_error_b(ERR_OUTFILE, pip);
 	pipex_b(pip, argc, argv, envp);
-	free_tab_b(pip->paths);
-	free(pip);
+	msg_error_b(NULL, pip);
 	return (0);
 }

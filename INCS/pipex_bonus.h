@@ -27,6 +27,7 @@
 # define ERR_DUP "Dup2"
 # define ERR_CMD "Command not found\n"
 # define ERR_MALLOC "Error Malloc\n"
+# define ERR_ENVP "Error Environment\n"
 
 typedef struct s_pipexb
 {
@@ -41,6 +42,7 @@ typedef struct s_pipexb
 	int		*end;
 	int		hd;
 	int		argc_min;
+	char	**c_hd;
 	pid_t	parent;
 }	t_pipexb;
 
@@ -53,6 +55,7 @@ void	dup_pipe(int first, int second, t_pipexb *pip);
 void	get_path_b(char **envp,t_pipexb *pip);
 
 //heredoc
+t_pipexb	*init_pip(void);
 t_pipexb	*check_argv(char *str);
 void get_infile(char **argv, t_pipexb pip);
 
