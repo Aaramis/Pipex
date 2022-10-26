@@ -29,7 +29,7 @@
 # define ERR_MALLOC "Error Malloc\n"
 # define ERR_ENVP "Error Environment\n"
 
-# define malloc(x) xmalloc(x)
+// # define malloc(x) xmalloc(x)
 
 typedef struct s_pipexb
 {

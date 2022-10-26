@@ -5,7 +5,7 @@ Ne verifie pas si le fd est ouvert correctement avant de fermer
 
 Probleme de fd si les commandes n'existe pas
 
-env -i segfault attention a verifier si l'environement n'exsite pas
+env -i segfault attention a verifier si l'environement n'exsite pas  : DONE
 verifie cat | ls pour tes pipes si ca fonctionne pas comme le vrai (sur bash) c'est surement faux.
 
 "To turn in bonuses to your project, you must include a rule bonus to your Makefile,
@@ -18,4 +18,4 @@ Regarde pour perror un peu le fonctionnement exacte
 
 
 Valgrind flags: --trace-children=yes --track-fds=yes
-Makefile: regarde comment fonctionne les dependences.
+Makefile: regarde comment fonctionne les dependences.  DONE

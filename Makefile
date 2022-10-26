@@ -37,7 +37,7 @@ WFLAGS		= -Wall -Werror -Wextra
 IFLAGS		= -I $(INC) -I $(INC_L)
 IFLAGS2		= -I .$(INC) -I .$(INC_L)
 OFLAGS		= -O2 -funroll-loops
-GFLAGS		= $(WFLAGS) $(IFLAGS) $(OFLAGS)
+GFLAGS		= $(IFLAGS) $(OFLAGS)
 LIB			= $(LIBFT_F)/$(NAME_LIB)
 
 #	OUTPUT
@@ -61,18 +61,20 @@ EOC			= "\033[0;0m"
 
 all:		$(NAME_EX)
 
-$(NAME_EX):
+$(NAME_EX): $(OBJS)
 		@echo $(CYAN) "\n"					\
 		"#######################################\n"		\
 		"   Compilation des fichiers en cours   \n"	 	\
 		"#######################################\n"		\
 		$(EOC)
-		@cd $(LIBFT_F) && $(MAKE) all
-		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS)
-		@$(CC) $(GFLAGS) $(SRC_F)main.c $(OBJS) $(LIB_F) -o $(NAME_EX)
+		@$(CC) $(GFLAGS) $(SRC_F)main.c $(OBJS) $(LIB_F) -o $(NAME_EX) 
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully compiled -------\n"		\
 		$(EOC)
+
+.c.o:
+		@cd $(LIBFT_F) && $(MAKE) all
+		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS)
 
 clean:
 		@$(RM) $(OBJS)

@@ -42,7 +42,7 @@ t_pipexb	*init_pip(void)
 
 void	msg_error(char *str, t_pipexb *pip)
 {
-	if (pip->argc_min)
+	if (pip)
 	{
 		if (pip->paths)
 			free_tab(pip->paths);
@@ -60,7 +60,7 @@ void	msg_error(char *str, t_pipexb *pip)
 	}
 	if (str)
 	{
-		perror(str);
+		// perror(str);
 		exit (1);
 	}
 }
@@ -81,7 +81,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipexb	*pip;
 
-	if (!envp)
+	if (!(*envp))
 		msg_error(ERR_ENVP, NULL);
 	pip = init_pip();
 	if (argc < pip->argc_min)
