@@ -6,7 +6,7 @@
 #    By: agardett <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/27 17:38:06 by agardett          #+#    #+#              #
-#    Updated: 2022/10/02 13:32:48 by agardett         ###   ########.fr        #
+#    Updated: 2023/03/03 10:25:13 by agardett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@
 # 	FILES
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
-FILES		= utils error childs
-BONUS_F		= child_bonus
+FILES		= error childs
+BONUS_F		= child_bonus error_bonus files_bonus free_bonus hdoc
  
 SRCS		= $(addsuffix .c,$(FILES))
 OBJS		= $(addprefix $(SRC_F),$(addsuffix .o,$(FILES)))
@@ -103,7 +103,7 @@ fclean:		clean
 		"#######################################\n"		\
 		$(EOC)
 		@cd $(LIBFT_F) && $(MAKE) fclean
-		@$(RM) $(NAME_EX)
+		@$(RM) $(NAME_EX) $(NAME_B)
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully cleaned -------\n"		\
 		$(EOC)

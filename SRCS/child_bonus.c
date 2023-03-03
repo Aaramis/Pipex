@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/03 10:23:14 by agardett          #+#    #+#             */
+/*   Updated: 2023/03/03 10:23:26 by agardett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static char	*get_cmd(char **paths, char *cmd)
+char	*get_cmd(char **paths, char *cmd)
 {
 	char	*tmp;
 	char	*command;
@@ -19,7 +30,7 @@ static char	*get_cmd(char **paths, char *cmd)
 	return (NULL);
 }
 
-static void	sub_dup2(int zero, int first)
+void	sub_dup2(int zero, int first)
 {
 	dup2(zero, 0);
 	dup2(first, 1);

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hdoc.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/03 10:24:11 by agardett          #+#    #+#             */
+/*   Updated: 2023/03/03 10:24:14 by agardett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
@@ -20,7 +31,7 @@ void	here_doc(char *argv, t_ppxb *pipex)
 	int		file;
 	char	*buf;
 
-	file = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
+	file = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (file < 0)
 		msg_error(ERR_HEREDOC);
 	while (1)

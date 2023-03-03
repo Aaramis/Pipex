@@ -19,3 +19,19 @@ Regarde pour perror un peu le fonctionnement exacte
 
 Valgrind flags: --trace-children=yes --track-fds=yes
 Makefile: regarde comment fonctionne les dependences.  DONE
+
+
+
+env -i ./pipex /dev/stdin "cat Makefile" "grep main" /dev/stdout
+
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" "wc" "echo yes" "echo no"
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" | "wc" file2
+./pipex file1 "ls" | "wc" file2         WRONG
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" "wc" file2  WRONG
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" "echo yes" "wc" file2  OK
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" p "wc" file2    OK
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" | "wc" file2    WRONG
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls"
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls"
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" "wc" file2 fewfew fewfewffwef efwfwe fewfwef fwefwe
+valgrind --leak-check=full --show-leak-kinds=all ./pipex file1 "ls" "wc" file2 fewfew fewfewffwef efwfwe fewfwef fwefwe

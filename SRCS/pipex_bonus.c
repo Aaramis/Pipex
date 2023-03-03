@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agardett <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/03 10:24:27 by agardett          #+#    #+#             */
+/*   Updated: 2023/03/03 10:24:29 by agardett         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex_bonus.h"
 
-static void	creat_pipes(t_ppxb *pipex)
+void	creat_pipes(t_ppxb *pipex)
 {
 	int	i;
 
@@ -25,12 +37,14 @@ void	close_pipes(t_ppxb *pipex)
 	}
 }
 
-int	main(int argc, char *argv[], char *envp[])
+int	main(int argc, char **argv, char **envp)
 {
 	t_ppxb	pipex;
 
 	if (argc < args_in(argv[1], &pipex))
 		return (msg(ERR_INPUT));
+	if (!(*envp))
+		return (msg_error(ERR_ENVP));
 	get_infile(argv, &pipex);
 	get_outfile(argv[argc - 1], &pipex);
 	pipex.cmd_nmbs = argc - 3 - pipex.here_doc;
