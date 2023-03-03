@@ -17,10 +17,13 @@
 # 	FILES
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
-FILES		= utils
-
+FILES		= utils error childs
+BONUS_F		= child_bonus
+ 
 SRCS		= $(addsuffix .c,$(FILES))
 OBJS		= $(addprefix $(SRC_F),$(addsuffix .o,$(FILES)))
+SRCS_B		= $(addsuffix .c,$(BONUS_F))
+OBJS_B		= $(addprefix $(SRC_F), $(addsuffix .o,$(BONUS_F)))
 
 #	INCLUDES
 INC			= ./INCS
@@ -37,11 +40,12 @@ WFLAGS		= -Wall -Werror -Wextra
 IFLAGS		= -I $(INC) -I $(INC_L)
 IFLAGS2		= -I .$(INC) -I .$(INC_L)
 OFLAGS		= -O2 -funroll-loops
-GFLAGS		= $(IFLAGS) $(OFLAGS)
+GFLAGS		= $(WFLAGS) $(IFLAGS) $(OFLAGS)
 LIB			= $(LIBFT_F)/$(NAME_LIB)
 
 #	OUTPUT
 NAME_EX		= pipex
+NAME_B		= pipex_bonus
 
 ############
 #  COLORS  #
@@ -61,23 +65,35 @@ EOC			= "\033[0;0m"
 
 all:		$(NAME_EX)
 
-$(NAME_EX): $(OBJS)
+$(NAME_EX):
 		@echo $(CYAN) "\n"					\
 		"#######################################\n"		\
 		"   Compilation des fichiers en cours   \n"	 	\
 		"#######################################\n"		\
 		$(EOC)
-		@$(CC) $(GFLAGS) $(SRC_F)main.c $(OBJS) $(LIB_F) -o $(NAME_EX) 
+		@cd $(LIBFT_F) && $(MAKE) all
+		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS)
+		@$(CC) $(GFLAGS) $(SRC_F)pipex.c $(OBJS) $(LIB_F) -o $(NAME_EX)
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully compiled -------\n"		\
 		$(EOC)
 
-.c.o:
-		@cd $(LIBFT_F) && $(MAKE) all
-		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS)
+$(NAME_B):
+		@echo $(CYAN) "\n"					\
+		"#############################################\n"	\
+		"   Compilation des fichiers Bonus en cours   \n"	\
+		"#############################################\n"	\
+		$(EOC)
+		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS_B)
+		@$(CC) $(GFLAGS) $(SRC_F)pipex_bonus.c $(OBJS_B) $(LIB_F) -o $(NAME_B)
+		@echo $(CYAN) "\n"					\
+		"------- Succeeded : fully compiled -------\n"		\
+		$(EOC)
+
+bonus:	$(NAME_EX) $(NAME_B)
 
 clean:
-		@$(RM) $(OBJS)
+		@$(RM) $(OBJS) $(OBJS_B)
 		@cd $(LIBFT_F) && $(MAKE) clean
 
 fclean:		clean
@@ -94,6 +110,7 @@ fclean:		clean
 
 re: 		fclean
 		@$(MAKE) all
+		@$(MAKE) bonus
 
 .PHONY: 	all clean fclean re
 .SILENT:	all

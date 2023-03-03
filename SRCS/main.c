@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "pipex.h"
 
 void	get_path(char **envp, t_pipexb *pip)
@@ -42,7 +43,7 @@ t_pipexb	*init_pip(void)
 
 void	msg_error(char *str, t_pipexb *pip)
 {
-	if (pip)
+	if (pip->argc_min)
 	{
 		if (pip->paths)
 			free_tab(pip->paths);
@@ -60,7 +61,7 @@ void	msg_error(char *str, t_pipexb *pip)
 	}
 	if (str)
 	{
-		// perror(str);
+		perror(str);
 		exit (1);
 	}
 }
@@ -81,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipexb	*pip;
 
-	if (!(*envp))
+	if (!envp)
 		msg_error(ERR_ENVP, NULL);
 	pip = init_pip();
 	if (argc < pip->argc_min)
@@ -97,13 +98,4 @@ int	main(int argc, char **argv, char **envp)
 	msg_error(NULL, pip);
 	return (0);
 }
-
-// void *xmalloc(size_t size)
-// {
-// 	static size_t i = 0;
-
-// 	++i;
-// 	if (i == 80000000000000)
-// 		return NULL;
-// 	return malloc(size);
-// }
+*/

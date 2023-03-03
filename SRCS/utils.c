@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "pipex.h"
 
 char	*get_cmd(t_pipexb *pip, char *argv)
@@ -96,3 +97,4 @@ void	pipex(t_pipexb *pip, int argc, char **argv, char **envp)
 	close(pip->infile);
 	close(pip->outfile);
 }
+*/
