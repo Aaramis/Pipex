@@ -12,6 +12,24 @@
 
 #include "pipex.h"
 
+void	error(char *msg_err, t_pipex *pipex)
+{
+	char	*tmp;
+
+	if (pipex)
+	{
+		if (pipex->fd)
+		{
+			close(pipex->fd[1]);
+			close(pipex->fd[0]);
+		}
+	}
+	tmp = ft_strjoin("\033[31m", msg_err);
+	perror(tmp);
+	free(tmp);
+	exit(EXIT_FAILURE);
+}
+
 char	*find_path(t_pipex *pipex, char **envp)
 {
 	int		i;
@@ -41,12 +59,12 @@ char	*find_path(t_pipex *pipex, char **envp)
 
 void	execute(t_pipex *pipex, char *argv, char **envp)
 {
-	int 	i;
-	
+	int	i;
+
 	i = -1;
 	pipex->cmds_args = ft_split(argv, ' ');
 	pipex->cmd = find_path(pipex, envp);
-	if (!pipex->cmd)	
+	if (!pipex->cmd)
 	{
 		while (pipex->cmds_args[++i])
 			free(pipex->cmds_args[i]);

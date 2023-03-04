@@ -52,10 +52,22 @@ Bonus part allows to handle multiple pipes
 It should be executed in this way:
 ```bash
 $> make bonus
-$>  ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file
+$>  ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 ```
 
 The execution of the pipex program should do the same as the next shell command:
 ```bash
 $> < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
+```
+
+## Bonus Part 2:
+
+Bonus should support « and » when the first parameter is "here_doc".
+```bash
+$> < ./pipex here_doc LIMITER cmd cmd1 file
+```
+
+The execution of the pipex program should do the same as the next shell command:
+```bash
+$> < cmd << LIMITER | cmd1 >> file
 ```

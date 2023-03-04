@@ -18,7 +18,7 @@
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
 FILES		= childs
-BONUS_F		= child_bonus error_bonus files_bonus free_bonus hdoc
+BONUS_F		= child_bonus hdoc
  
 SRCS		= $(addsuffix .c,$(FILES))
 OBJS		= $(addprefix $(SRC_F),$(addsuffix .o,$(FILES)))
@@ -84,8 +84,8 @@ $(NAME_B):
 		"   Compilation des fichiers Bonus en cours   \n"	\
 		"#############################################\n"	\
 		$(EOC)
-		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS_B)
-		@$(CC) $(GFLAGS) $(SRC_F)pipex_bonus.c $(OBJS_B) $(LIB_F) -o $(NAME_B)
+		@cd $(SRC_F) && $(CC) $(WFLAGS) $(IFLAGS2) -c $(SRCS_B) $(SRCS)
+		@$(CC) $(GFLAGS) $(SRC_F)pipex_bonus.c $(OBJS_B) $(OBJS) $(LIB_F) -o $(NAME_B)
 		@echo $(CYAN) "\n"					\
 		"------- Succeeded : fully compiled -------\n"		\
 		$(EOC)

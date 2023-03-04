@@ -13,62 +13,16 @@
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
 
-# include "libft.h"
-# include "ft_printf.h"
-# include "get_next_line.h"
-# include <errno.h>
-# include <sys/wait.h>
-
-# define ERR_INPUT "Error Inputs"
-# define ERR_INFILE "Error Infile"
-# define ERR_OUTFILE "Error Outfile"
-# define ERR_PIPE "Error Pipe"
-# define ERR_ENVP "Error Environment"
-# define ERR_CMD "Command not found\n"
-# define ERR_HEREDOC "Error Here Doc"
-
-typedef struct s_ppxd
-{
-	char	*env_path;
-	char	*cmd;
-	char	**cmd_paths;
-	char	**cmd_args;
-	int		infile;
-	int		outfile;
-	int		here_doc;
-	int		cmd_nmbs;
-	int		pipe_nmbs;
-	int		idx;
-	int		*pipe;
-	pid_t	pid;
-}	t_ppxb;
+# include "pipex.h"
 
 //child_bonus
-char	*get_cmd(char **paths, char *cmd);
-void	sub_dup2(int zero, int first);
-void	child(t_ppxb p, char **argv, char **envp);
-
-// error_bonus
-int		msg(char *err);
-void	msg_pipe(char *arg);
-int		msg_error(char *err);
-
-// files_bonus
-char	*find_path(char **envp);
-void	get_infile(char **argv, t_ppxb *pipex);
-void	get_outfile(char *argv, t_ppxb *pipex);
-
-// free_bonus
-void	parent_free(t_ppxb *pipex);
-void	child_free(t_ppxb *pipex);
-void	pipe_free(t_ppxb *pipex);
-
-// pipex_bonus
-void	creat_pipes(t_ppxb *pipex);
-void	close_pipes(t_ppxb *pipex);
+void	bonus_process(t_pipex *pipex, char *argv, char **envp);
+int		open_file(char *argv, int i);
+char	*find_path_bonus(t_pipex *pipex, char **envp);
+void	usage(void);
 
 // hoc
-int		args_in(char *arg, t_ppxb *pipex);
-void	here_doc(char *argv, t_ppxb *pipex);
+void	here_doc(t_pipex	*pipex, char *limiter, int argc);
+// void	here_doc(char *argv, t_pipex *pipex);
 
 #endif

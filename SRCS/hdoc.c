@@ -12,45 +12,38 @@
 
 #include "pipex_bonus.h"
 
-int	args_in(char *arg, t_ppxb *pipex)
+static void	read_term(t_pipex *pipex, char *limiter)
 {
-	if (arg && !ft_strncmp("here_doc", arg, 9))
+	char	*line;
+
+	while (get_next_line(0, &line))
 	{
-		pipex->here_doc = 1;
-		return (6);
-	}
-	else
-	{
-		pipex->here_doc = 0;
-		return (5);
+		if (!ft_strncmp(line, limiter, ft_strlen(limiter)))
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
+		write(pipex->fd[1], line, ft_strlen(line));
+		free(line);
 	}
 }
 
-void	here_doc(char *argv, t_ppxb *pipex)
+void	here_doc(t_pipex *pipex, char *limiter, int argc)
 {
-	int		file;
-	char	*buf;
-
-	file = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (file < 0)
-		msg_error(ERR_HEREDOC);
-	while (1)
+	if (argc < 6)
+		usage();
+	if (pipe(pipex->fd) == -1)
+		error(ERR_PIPE, NULL);
+	pipex->pid = fork();
+	if (pipex->pid == 0)
 	{
-		write(1, "heredoc> ", 9);
-		if (get_next_line(0, &buf) < 0)
-			exit(1);
-		if (!ft_strncmp(argv, buf, ft_strlen(argv) + 1))
-			break ;
-		write(file, buf, ft_strlen(buf));
-		write(file, "\n", 1);
-		free(buf);
+		close(pipex->fd[0]);
+		read_term(pipex, limiter);
 	}
-	free(buf);
-	close(file);
-	pipex->infile = open(".heredoc_tmp", O_RDONLY);
-	if (pipex->infile < 0)
+	else
 	{
-		unlink(".heredoc_tmp");
-		msg_error(ERR_HEREDOC);
+		close(pipex->fd[1]);
+		dup2(pipex->fd[0], STDIN_FILENO);
+		wait(NULL);
 	}
 }

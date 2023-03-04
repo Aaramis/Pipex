@@ -28,7 +28,6 @@
 # define ERR_INF "Error Infile"
 # define ERR_OUT "Error Outfile"
 
-
 typedef struct s_pipex
 {
 	pid_t	pid;
@@ -39,6 +38,8 @@ typedef struct s_pipex
 	int		infile;
 	int		outfile;
 	int		fd[2];
+	int		idx;
+	int		here_doc;
 }	t_pipex;
 
 //childs
@@ -46,8 +47,6 @@ void	parent_process(t_pipex *pipex, char **argv, char **envp);
 void	child_process(t_pipex *pipex, char **argv, char **envp);
 void	execute(t_pipex *pipex, char *argv, char **envp);
 char	*find_path(t_pipex *pipex, char **envp);
-
-//pipex
 void	error(char *msg_err, t_pipex *pipex);
 
 #endif

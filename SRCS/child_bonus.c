@@ -12,50 +12,47 @@
 
 #include "pipex_bonus.h"
 
-char	*get_cmd(char **paths, char *cmd)
+void	usage(void)
 {
-	char	*tmp;
-	char	*command;
-
-	while (*paths)
-	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
-	}
-	return (NULL);
+	ft_putstr_fd("\033[31mError: Bad argument\n\e[0m", 2);
+	ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <...> <file2>\n", 1);
+	ft_putstr_fd("    ./pipex \"here_doc\" <LIMITER> <cmd> <...> <file>\n", 1);
+	exit(EXIT_SUCCESS);
 }
 
-void	sub_dup2(int zero, int first)
+void	bonus_process(t_pipex *pipex, char *argv, char **envp)
 {
-	dup2(zero, 0);
-	dup2(first, 1);
+	if (pipe(pipex->fd) == -1)
+		error(ERR_PIPE, pipex);
+	pipex->pid = fork();
+	if (pipex->pid == -1)
+		error(ERR_FORK, pipex);
+	if (pipex->pid == 0)
+	{
+		close(pipex->fd[0]);
+		dup2(pipex->fd[1], STDOUT_FILENO);
+		execute(pipex, argv, envp);
+	}
+	else
+	{
+		close(pipex->fd[1]);
+		dup2(pipex->fd[0], STDIN_FILENO);
+		waitpid(pipex->pid, NULL, 0);
+	}
 }
 
-void	child(t_ppxb p, char **argv, char **envp)
+int	open_file(char *argv, int i)
 {
-	p.pid = fork();
-	if (!p.pid)
-	{
-		if (p.idx == 0)
-			sub_dup2(p.infile, p.pipe[1]);
-		else if (p.idx == p.cmd_nmbs - 1)
-			sub_dup2(p.pipe[2 * p.idx - 2], p.outfile);
-		else
-			sub_dup2(p.pipe[2 * p.idx - 2], p.pipe[2 * p.idx + 1]);
-		close_pipes(&p);
-		p.cmd_args = ft_split(argv[2 + p.here_doc + p.idx], ' ');
-		p.cmd = get_cmd(p.cmd_paths, p.cmd_args[0]);
-		if (!p.cmd)
-		{
-			msg_pipe(p.cmd_args[0]);
-			child_free(&p);
-			exit(1);
-		}
-		execve(p.cmd, p.cmd_args, envp);
-	}
+	int	file;
+
+	file = 0;
+	if (i == 0)
+		file = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	else if (i == 1)
+		file = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	else if (i == 2)
+		file = open(argv, O_RDONLY, 0777);
+	if (file == -1)
+		error(ERR_INPUT, NULL);
+	return (file);
 }

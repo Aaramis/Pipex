@@ -12,21 +12,6 @@
 
 #include "pipex.h"
 
-void	error(char *msg_err, t_pipex *pipex)
-{
-	char	*tmp;
-
-	if (pipex->fd)
-	{
-		close(pipex->fd[1]);
-		close(pipex->fd[0]);
-	}
-	tmp = ft_strjoin("\033[31m", msg_err);
-	perror(tmp);
-	free(tmp);
-	exit(EXIT_FAILURE);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
@@ -44,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 			child_process(&pipex, argv, envp);
 		waitpid(pipex.pid, NULL, 0);
 		parent_process(&pipex, argv, envp);
-		if (close(pipex.infile) < 0 ||	close(pipex.outfile) < 0)
+		if (close(pipex.infile) < 0 || close(pipex.outfile) < 0)
 			error(ERR_FILE, &pipex);
 	}
 	else
