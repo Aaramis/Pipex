@@ -12,44 +12,45 @@
 
 #include "pipex.h"
 
-char	*get_paths(char **envp)
+void	error(char *msg_err, t_pipex *pipex)
 {
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
-}
+	char	*tmp;
 
-void	close_pip(t_pipex *pipex)
-{
-	close(pipex->tb[0]);
-	close(pipex->tb[1]);
+	if (pipex->fd)
+	{
+		close(pipex->fd[1]);
+		close(pipex->fd[0]);
+	}
+	tmp = ft_strjoin("\033[31m", msg_err);
+	perror(tmp);
+	free(tmp);
+	exit(EXIT_FAILURE);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
 
-	if (argc != 5)
-		return (msg(ERR_INPUT));
 	if (!(*envp))
-		return (msg_error(ERR_ENVP));
-	pipex.infile = open(argv[1], O_RDONLY);
-	if (pipex.infile < 0)
-		msg_error(ERR_INF);
-	pipex.outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
-	if (pipex.outfile < 0)
-		msg_error(ERR_OUT);
-	if (pipe(pipex.tb) < 0)
-		msg_error(ERR_PIPE);
-	pipex.paths = get_paths(envp);
-	pipex.cmds_paths = ft_split(pipex.paths, ':');
-	pipex.pd1 = fork();
-	if (pipex.pd1 == 0)
-		first_child(pipex, argv, envp);
-	pipex.pd2 = fork();
-	if (pipex.pd2 == 0)
-		second_child(pipex, argv, envp);
-	close_pip(&pipex);
-	waitpid(pipex.pd1, NULL, 0);
-	waitpid(pipex.pd2, NULL, 0);
+		error(ERR_ENVP, NULL);
+	else if (argc == 5)
+	{
+		if (pipe(pipex.fd) == -1)
+			error(ERR_PIPE, NULL);
+		pipex.pid = fork();
+		if (pipex.pid == -1)
+			error(ERR_FORK, &pipex);
+		if (pipex.pid == 0)
+			child_process(&pipex, argv, envp);
+		waitpid(pipex.pid, NULL, 0);
+		parent_process(&pipex, argv, envp);
+		if (close(pipex.infile) < 0 ||	close(pipex.outfile) < 0)
+			error(ERR_FILE, &pipex);
+	}
+	else
+	{
+		ft_putstr_fd("\033[31mError: Bad arguments\n\e[0m", 2);
+		ft_putstr_fd("Ex: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
+	}
+	return (0);
 }

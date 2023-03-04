@@ -12,66 +12,69 @@
 
 #include "pipex.h"
 
-char	*find_cmd(char **cmds_paths, char *cmd)
+char	*find_path(t_pipex *pipex, char **envp)
 {
+	int		i;
 	char	*tmp;
-	char	*command;
 
-	while (*cmds_paths)
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+		i++;
+	pipex->cmds_paths = ft_split(envp[i] + 5, ':');
+	i = 0;
+	while (pipex->cmds_paths[i])
 	{
-		tmp = ft_strjoin(*cmds_paths, "/");
-		command = ft_strjoin(tmp, cmd);
+		tmp = ft_strjoin(pipex->cmds_paths[i], "/");
+		pipex->path = ft_strjoin(tmp, pipex->cmds_args[0]);
 		free(tmp);
-		if (!access(command, 0))
-			return (command);
-		free(command);
-		cmds_paths++;
+		if (access(pipex->path, 0) == 0)
+			return (pipex->path);
+		free(pipex->path);
+		i++;
 	}
+	i = -1;
+	while (pipex->cmds_paths[++i])
+		free(pipex->cmds_paths[i]);
+	free(pipex->cmds_paths);
 	return (NULL);
 }
 
-void	first_child(t_pipex pipex, char **argv, char **envp)
+void	execute(t_pipex *pipex, char *argv, char **envp)
 {
-	dup2(pipex.tb[1], 1);
-	close(pipex.tb[0]);
-	dup2(pipex.infile, 0);
-	pipex.cmds_args = ft_split(argv[2], ' ');
-	pipex.cmd = find_cmd(pipex.cmds_paths, pipex.cmds_args[0]);
-	if (!pipex.cmd)
+	int 	i;
+	
+	i = -1;
+	pipex->cmds_args = ft_split(argv, ' ');
+	pipex->cmd = find_path(pipex, envp);
+	if (!pipex->cmd)	
 	{
-		child_free(&pipex);
-		msg(ERR_CMD);
-		exit(1);
+		while (pipex->cmds_args[++i])
+			free(pipex->cmds_args[i]);
+		free(pipex->cmds_args);
+		error(ERR_INPUT, pipex);
 	}
-	execve(pipex.cmd, pipex.cmds_args, envp);
+	if (execve(pipex->cmd, pipex->cmds_args, envp) == -1)
+		error(ERR_CMD, pipex);
 }
 
-void	second_child(t_pipex pipex, char **argv, char **envp)
+void	child_process(t_pipex *pipex, char **argv, char **envp)
 {
-	dup2(pipex.tb[0], 0);
-	close(pipex.tb[1]);
-	dup2(pipex.outfile, 1);
-	pipex.cmds_args = ft_split(argv[2], ' ');
-	pipex.cmd = find_cmd(pipex.cmds_paths, pipex.cmds_args[0]);
-	if (!pipex.cmd)
-	{
-		child_free(&pipex);
-		msg(ERR_CMD);
-		exit(1);
-	}
-	execve(pipex.cmd, pipex.cmds_args, envp);
+	pipex->infile = open(argv[1], O_RDONLY, 0777);
+	if (pipex->infile == -1)
+		error(ERR_INF, pipex);
+	dup2(pipex->fd[1], STDOUT_FILENO);
+	dup2(pipex->infile, STDIN_FILENO);
+	close(pipex->fd[0]);
+	execute(pipex, argv[2], envp);
 }
 
-void	child_free(t_pipex *pipex)
+void	parent_process(t_pipex *pipex, char **argv, char **envp)
 {
-	int	i;
-
-	i = 0;
-	while (pipex->cmds_args[i])
-	{
-		free(pipex->cmds_args[i]);
-		i++;
-	}
-	free(pipex->cmds_args);
-	free(pipex->cmd);
+	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pipex->outfile == -1)
+		error(ERR_OUT, pipex);
+	dup2(pipex->fd[0], STDIN_FILENO);
+	dup2(pipex->outfile, STDOUT_FILENO);
+	close(pipex->fd[1]);
+	execute(pipex, argv[3], envp);
 }

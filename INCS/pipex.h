@@ -19,37 +19,35 @@
 # include <errno.h>
 # include <sys/wait.h>
 
+# define ERR_ENVP "Error Environment"
+# define ERR_PIPE "Error Pipe"
+# define ERR_FORK "Error Fork"
+# define ERR_FILE "Error file closing"
+# define ERR_CMD "Command not found\n"
 # define ERR_INPUT "Error Inputs"
 # define ERR_INF "Error Infile"
 # define ERR_OUT "Error Outfile"
-# define ERR_PIPE "Error Pipe"
-# define ERR_ENVP "Error Environment"
-# define ERR_CMD "Command not found\n"
+
 
 typedef struct s_pipex
 {
-	pid_t	pd1;
-	pid_t	pd2;
-	char	*paths;
+	pid_t	pid;
+	char	*path;
 	char	**cmds_paths;
 	char	**cmds_args;
 	char	*cmd;
 	int		infile;
 	int		outfile;
-	int		tb[2];
+	int		fd[2];
 }	t_pipex;
 
 //childs
-char	*find_cmd(char **cmds_paths, char *cmd);
-void	first_child(t_pipex pipex, char **argv, char **envp);
-void	second_child(t_pipex pipex, char **argv, char **envp);
-void	child_free(t_pipex *pipex);
-
-//error
-int		msg(char *msg_err);
-int		msg_error(char *msg_err);
+void	parent_process(t_pipex *pipex, char **argv, char **envp);
+void	child_process(t_pipex *pipex, char **argv, char **envp);
+void	execute(t_pipex *pipex, char *argv, char **envp);
+char	*find_path(t_pipex *pipex, char **envp);
 
 //pipex
-char	*get_paths(char **envp);
+void	error(char *msg_err, t_pipex *pipex);
 
 #endif
