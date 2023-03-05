@@ -29,6 +29,8 @@
 # define ERR_OUT "Error Outfile"
 # define ERR_MALLOC "Error malloc"
 # define ERR_PATH "Error PATH"
+# define ERR_INF_ACC "Error File Access"
+# define ERR_INF_READ "Error File READ"
 
 typedef struct s_pipex
 {
@@ -45,15 +47,26 @@ typedef struct s_pipex
 }	t_pipex;
 
 //childs
-char	*cmd_path(t_pipex *pipex, char **envp, int i);
-void	parent_process(t_pipex *pipex, char **argv, char **envp);
-void	child_process(t_pipex *pipex, char **argv, char **envp);
-void	execute(t_pipex *pipex, char *argv, char **envp);
-char	*find_path(t_pipex *pipex, char **envp);
+// char	*cmd_path(t_pipex *pipex, char **envp, int i);
+// void	parent_process(t_pipex *pipex, char **argv, char **envp);
+// void	child_process(t_pipex *pipex, char **argv, char **envp);
+// void	execute(t_pipex *pipex, char *argv, char **envp);
+// char	*find_path(t_pipex *pipex, char **envp);
 
 //error
+// void	error(char *msg_err);
+// void	free_pipex(t_pipex *pipex);
+// int		is_executable(t_pipex *pipex);
+char	*find_path(char **envp);
+char	*get_cmd(t_pipex *pipex);
+void	child(t_pipex *pipex, char **argv, char **envp);
+void	parent(t_pipex *pipex, char **argv, char **envp);
+void	execute(t_pipex *pipex, char *argv, char **envp);
+
+int	is_executable(t_pipex *pipex);
 void	error(char *msg_err);
 void	free_pipex(t_pipex *pipex);
-int		is_executable(t_pipex *pipex);
+int	ft_fork(t_pipex pipex, char **argv, char **envp);
+void	close_pipes(t_pipex *pipex);
 
 #endif

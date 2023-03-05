@@ -12,31 +12,33 @@
 
 #include "pipex_bonus.h"
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_pipex	pipex;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_pipex	pipex;
 
-	if (!(*envp))
-		error(ERR_ENVP);
-	else if (argc >= 5)
-	{
-		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
-		{
-			pipex.idx = 3;
-			pipex.outfile = open_file(argv[argc - 1], 0);
-			here_doc(&pipex, argv[2], argc);
-		}
-		else
-		{
-			pipex.idx = 2;
-			pipex.outfile = open_file(argv[argc - 1], 1);
-			pipex.infile = open_file(argv[1], 2);
-			dup2(pipex.infile, STDIN_FILENO);
-		}
-		while (pipex.idx < argc - 2)
-			bonus_process(&pipex, argv[(pipex.idx)++], envp);
-		dup2(pipex.outfile, STDOUT_FILENO);
-		execute(&pipex, argv[argc - 2], envp);
-	}
-	error(ERR_INPUT);
-}
+// 	// if (!(*envp))
+// 	// 	error(ERR_ENVP);
+// 	if (argc >= 5)
+// 	{
+// 		pipex.path = find_path(envp);
+// 		pipex.cmds_paths = ft_split(pipex.path, ':');
+// 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+// 		{
+// 			pipex.idx = 3;
+// 			pipex.outfile = open_file(argv[argc - 1], 0);
+// 			here_doc(&pipex, argv[2], argc);
+// 		}
+// 		else
+// 		{
+// 			pipex.idx = 2;
+// 			pipex.outfile = open_file(argv[argc - 1], 1);
+// 			pipex.infile = open_file(argv[1], 2);
+// 			dup2(pipex.infile, STDIN_FILENO);
+// 		}
+// 		while (pipex.idx < argc - 2)
+// 			bonus_process(&pipex, argv[(pipex.idx)++], envp);
+// 		dup2(pipex.outfile, STDOUT_FILENO);
+// 		execute(&pipex, argv[argc - 2], envp);
+// 	}
+// 	error(ERR_INPUT);
+// }

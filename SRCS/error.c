@@ -12,6 +12,22 @@
 
 #include "pipex.h"
 
+int	ft_fork(t_pipex pipex, char **argv, char **envp)
+{
+	pipex.pid = fork();
+	if (pipex.pid == 0)
+		child(&pipex, argv, envp);
+	else
+		parent(&pipex, argv, envp);
+	return (pipex.pid);
+}
+
+void	close_pipes(t_pipex *pipex)
+{
+	if (close(pipex->fd[0]) < 0 || close(pipex->fd[1]) < 0)
+			error(ERR_FILE);
+}
+
 int	is_executable(t_pipex *pipex)
 {
 	if (ft_strchr(pipex->cmds_args[0], '/'))
