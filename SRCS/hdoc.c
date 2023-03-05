@@ -33,7 +33,7 @@ void	here_doc(t_pipex *pipex, char *limiter, int argc)
 	if (argc < 6)
 		usage();
 	if (pipe(pipex->fd) == -1)
-		error(ERR_PIPE, NULL);
+		error(ERR_PIPE);
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{

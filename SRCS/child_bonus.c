@@ -23,10 +23,10 @@ void	usage(void)
 void	bonus_process(t_pipex *pipex, char *argv, char **envp)
 {
 	if (pipe(pipex->fd) == -1)
-		error(ERR_PIPE, pipex);
+		error(ERR_PIPE);
 	pipex->pid = fork();
 	if (pipex->pid == -1)
-		error(ERR_FORK, pipex);
+		error(ERR_FORK);
 	if (pipex->pid == 0)
 	{
 		close(pipex->fd[0]);
@@ -53,6 +53,6 @@ int	open_file(char *argv, int i)
 	else if (i == 2)
 		file = open(argv, O_RDONLY, 0777);
 	if (file == -1)
-		error(ERR_INPUT, NULL);
+		error(ERR_INPUT);
 	return (file);
 }

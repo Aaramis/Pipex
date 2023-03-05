@@ -12,24 +12,6 @@
 
 #include "pipex.h"
 
-void	error(char *msg_err, t_pipex *pipex)
-{
-	char	*tmp;
-
-	if (pipex)
-	{
-		if (pipex->fd)
-		{
-			close(pipex->fd[1]);
-			close(pipex->fd[0]);
-		}
-	}
-	tmp = ft_strjoin("\033[31m", msg_err);
-	perror(tmp);
-	free(tmp);
-	exit(EXIT_FAILURE);
-}
-
 char	*find_path(t_pipex *pipex, char **envp)
 {
 	int		i;
@@ -69,17 +51,20 @@ void	execute(t_pipex *pipex, char *argv, char **envp)
 		while (pipex->cmds_args[++i])
 			free(pipex->cmds_args[i]);
 		free(pipex->cmds_args);
-		error(ERR_INPUT, pipex);
+		error(ERR_CMD);
 	}
 	if (execve(pipex->cmd, pipex->cmds_args, envp) == -1)
-		error(ERR_CMD, pipex);
+	{
+		free_pipex(pipex);
+		error(ERR_CMD);
+	}
 }
 
 void	child_process(t_pipex *pipex, char **argv, char **envp)
 {
-	pipex->infile = open(argv[1], O_RDONLY, 0777);
+	pipex->infile = open(argv[1], O_RDONLY);
 	if (pipex->infile == -1)
-		error(ERR_INF, pipex);
+		error(ERR_INF);
 	dup2(pipex->fd[1], STDOUT_FILENO);
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->fd[0]);
@@ -88,9 +73,9 @@ void	child_process(t_pipex *pipex, char **argv, char **envp)
 
 void	parent_process(t_pipex *pipex, char **argv, char **envp)
 {
-	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile == -1)
-		error(ERR_OUT, pipex);
+		error(ERR_OUT);
 	dup2(pipex->fd[0], STDIN_FILENO);
 	dup2(pipex->outfile, STDOUT_FILENO);
 	close(pipex->fd[1]);

@@ -17,7 +17,7 @@
 # 	FILES
 SRC_F		= ./SRCS/
 LIBFT_F		= ./libft
-FILES		= childs
+FILES		= childs error
 BONUS_F		= child_bonus hdoc
  
 SRCS		= $(addsuffix .c,$(FILES))

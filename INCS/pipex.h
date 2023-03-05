@@ -27,6 +27,7 @@
 # define ERR_INPUT "Error Inputs"
 # define ERR_INF "Error Infile"
 # define ERR_OUT "Error Outfile"
+# define ERR_MALLOC "Error malloc"
 
 typedef struct s_pipex
 {
@@ -47,6 +48,8 @@ void	parent_process(t_pipex *pipex, char **argv, char **envp);
 void	child_process(t_pipex *pipex, char **argv, char **envp);
 void	execute(t_pipex *pipex, char *argv, char **envp);
 char	*find_path(t_pipex *pipex, char **envp);
-void	error(char *msg_err, t_pipex *pipex);
+void	error(char *msg_err);
+
+void	free_pipex(t_pipex *pipex);
 
 #endif

@@ -17,7 +17,7 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	pipex;
 
 	if (!(*envp))
-		error(ERR_ENVP, NULL);
+		error(ERR_ENVP);
 	else if (argc >= 5)
 	{
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
@@ -38,5 +38,5 @@ int	main(int argc, char **argv, char **envp)
 		dup2(pipex.outfile, STDOUT_FILENO);
 		execute(&pipex, argv[argc - 2], envp);
 	}
-	usage();
+	error(ERR_INPUT);
 }
