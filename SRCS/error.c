@@ -12,6 +12,13 @@
 
 #include "pipex.h"
 
+int	is_executable(t_pipex *pipex)
+{
+	if (ft_strchr(pipex->cmds_args[0], '/'))
+		return (access(pipex->cmds_args[0], 0));
+	return (1);
+}
+
 void	error(char *msg_err)
 {
 	char	*tmp;

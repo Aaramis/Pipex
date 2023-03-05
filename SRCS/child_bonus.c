@@ -37,7 +37,8 @@ void	bonus_process(t_pipex *pipex, char *argv, char **envp)
 	{
 		close(pipex->fd[1]);
 		dup2(pipex->fd[0], STDIN_FILENO);
-		waitpid(pipex->pid, NULL, 0);
+		// waitpid(pipex->pid, NULL, 0);
+		wait(&pipex->pid);
 	}
 }
 

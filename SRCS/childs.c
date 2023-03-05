@@ -12,14 +12,10 @@
 
 #include "pipex.h"
 
-char	*find_path(t_pipex *pipex, char **envp)
+char	*cmd_path(t_pipex *pipex, char **envp, int i)
 {
-	int		i;
 	char	*tmp;
 
-	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
-		i++;
 	pipex->cmds_paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (pipex->cmds_paths[i])
@@ -37,6 +33,20 @@ char	*find_path(t_pipex *pipex, char **envp)
 		free(pipex->cmds_paths[i]);
 	free(pipex->cmds_paths);
 	return (NULL);
+}
+
+char	*find_path(t_pipex *pipex, char **envp)
+{
+	int		i;
+
+	if (!is_executable(pipex))
+		return (pipex->cmds_args[0]);
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0 && envp[i])
+		i++;
+	if (!envp[i])
+		error(ERR_PATH);
+	return (cmd_path(pipex, envp, i));
 }
 
 void	execute(t_pipex *pipex, char *argv, char **envp)
@@ -62,6 +72,13 @@ void	execute(t_pipex *pipex, char *argv, char **envp)
 
 void	child_process(t_pipex *pipex, char **argv, char **envp)
 {
+// 	pid_t	pid;
+	
+// 	pid = fork();
+// 	if (pid == -1)
+// 		error(ERR_FORK);
+	// else if (pid == 0)
+	// {
 	pipex->infile = open(argv[1], O_RDONLY);
 	if (pipex->infile == -1)
 		error(ERR_INF);
@@ -69,6 +86,7 @@ void	child_process(t_pipex *pipex, char **argv, char **envp)
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->fd[0]);
 	execute(pipex, argv[2], envp);
+	// }
 }
 
 void	parent_process(t_pipex *pipex, char **argv, char **envp)
