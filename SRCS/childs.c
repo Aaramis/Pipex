@@ -85,10 +85,15 @@ void	child(t_pipex *pipex, char **argv, char **envp)
 
 void	parent(t_pipex *pipex, char **argv, char **envp)
 {
+	int i;
+
+	i = -1;
 	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (access(argv[4], W_OK) < 0)
 	{
-		free_pipex(pipex);
+		while (pipex->cmds_paths[++i])
+			free(pipex->cmds_paths[i]);
+		free(pipex->cmds_paths);
 		error(ERR_OUT);
 	}
 	if (pipex->outfile == -1)
